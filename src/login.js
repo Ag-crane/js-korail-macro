@@ -1,15 +1,4 @@
-const puppeteer = require('puppeteer');
-
-/**
- * 코레일에 로그인하고, 로그인 성공 시 page 객체를 반환하는 함수
- * @param {Object} options - 로그인 옵션
- * @param {string} options.userId - 사용자 ID
- * @param {string} options.userPw - 사용자 PW
- * @param {boolean} [options.headless=false] - 브라우저 창 표시 여부
- * @returns {Promise<{browser: Browser, page: Page}>} - Puppeteer browser/page 객체
- */
-
-async function loginKorail(browser, page, { userId, userPw, headless = false }) {
+async function loginKorail(browser, page, { userId, userPw }) {
   try {
     // 코레일 로그인 페이지 접속
     console.log('[login.js] 로그인 페이지로 이동: https://www.letskorail.com/korail/com/login.do');
@@ -29,12 +18,12 @@ async function loginKorail(browser, page, { userId, userPw, headless = false }) 
 
     // ID/PW 입력
     console.log('[login.js] #txtMember 셀렉터 대기 시작');
-    await page.waitForSelector('#txtMember', { timeout: 0 });
+    await page.waitForSelector('#txtMember', { visible: true, timeout: 0 });
     console.log('[login.js] #txtMember 발견, 아이디 입력 시도:', userId);
     await page.type('#txtMember', userId);
 
     console.log('[login.js] #txtPwd 셀렉터 대기 시작');
-    await page.waitForSelector('#txtPwd', { timeout: 0 });
+    await page.waitForSelector('#txtPwd', {  visible: true, timeout: 0 });
     console.log('[login.js] #txtPwd 발견, 비밀번호 입력 시도');
     await page.type('#txtPwd', userPw);
 

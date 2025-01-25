@@ -1,13 +1,6 @@
-// src/reserve.js
+const player = require('play-sound')({});
 
-const { timeout } = require('puppeteer');
-
-/**
- * @param {import('puppeteer').Page} page - 로그인 성공 후의 Puppeteer page 객체
- * @param {string} startStation - 출발역 (예: "서울")
- * @param {string} endStation - 도착역 (예: "부산")
- */
-async function startReservation(browser, page, startStation, endStation, startDate) {
+async function startReservation(browser, page, startStation, endStation, startDate, startTime) {
     try {
         // 출발역 지우기
         await page.waitForSelector('#txtGoStart', { visible: true });
@@ -34,7 +27,7 @@ async function startReservation(browser, page, startStation, endStation, startDa
                 // 새 target(창/탭)이 생기면, 그것을 Page 객체로 변환
                 const newPage = await target.page();
                 // 팝업 DOM 로딩이 될 때까지 잠시 대기
-                await newPage.waitForSelector('body', {timeout: 0});
+                await newPage.waitForSelector('body', { timeout: 0 });
                 resolve(newPage);
             });
         });
@@ -55,20 +48,20 @@ async function startReservation(browser, page, startStation, endStation, startDa
         await popupPage.click(`#d${startDate}`);
         console.log(`[reserve.js] ${startDate} 날짜 클릭 완료`);
 
+        // 시간 선택
+        await page.waitForSelector('#time', { visible: true });
+        await page.select('#time', startTime);
 
-        // 3. "승차권 예매" 이미지 클릭
+        // "승차권 예매" 이미지 클릭
         console.log('[reserve.js] 승차권 예매(img[alt="승차권예매"]) 버튼 대기');
         await page.waitForSelector('img[alt="승차권예매"]', { visible: true });
         console.log('[reserve.js] 승차권 예매 버튼 클릭');
         await page.click('img[alt="승차권예매"]');
 
-        // 4. 페이지 이동 대기 (다음 페이지로 넘어간다면)
+        // 페이지 이동 대기
         console.log('[reserve.js] 페이지 네비게이션 대기 (networkidle2)');
         await page.waitForNavigation({ waitUntil: 'networkidle2', timeout: 0 });
         console.log('[reserve.js] 승차권 예매 페이지 이동 완료, 현재 URL:', page.url());
-
-        // 이후 날짜/시간/인원수/열차조회 등의 로직을 이어서 구현
-        // ...
     } catch (err) {
         console.error('[reserve.js] 에서 오류:', err);
         throw err;

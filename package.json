@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.4.7",
+    "korail-macro": "file:",
+    "node-notifier": "^10.0.1",
     "puppeteer": "^24.1.1"
   }
 }
