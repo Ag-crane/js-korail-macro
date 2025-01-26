@@ -5,6 +5,8 @@ async function loginKorail(browser, page, { userId, userPw }) {
       timeout: 0,
     });
 
+    await new Promise((page) => setTimeout(page, 3000)); // waitForTimeout 대체
+
     // Alert 핸들링
     let alertMessage = null;
     page.on('dialog', async (dialog) => {
