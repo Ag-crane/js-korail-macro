@@ -17,7 +17,6 @@ async function startReservation(browser, page, startStation, endStation, startDa
 
     // 달력
     await page.waitForSelector('img[alt="달력"].btn_sch_r', { visible: true });
-    await page.click('img[alt="달력"].btn_sch_r'); // 달력 클릭 → 새 팝업 발생
     // 팝업(새 창)이 생성될 때까지 기다리기 위한 Promise
     const newPopupPromise = new Promise(resolve => {
         browser.once('targetcreated', async target => {
@@ -26,6 +25,7 @@ async function startReservation(browser, page, startStation, endStation, startDa
             resolve(newPage);
         });
     });
+    await page.click('img[alt="달력"].btn_sch_r'); // 달력 클릭 → 새 팝업 발생
     const popupPage = await newPopupPromise;
     await popupPage.waitForSelector(`#d${startDate}`, { visible: true });
     await popupPage.click(`#d${startDate}`);
