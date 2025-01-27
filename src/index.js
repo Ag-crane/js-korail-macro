@@ -31,7 +31,7 @@ const { runMacro } = require('./macro');
 
         // 2) 예매 페이지로 이동
         console.log('[index.js] 예매 페이지로 이동 시작...');
-        await startReservation(browser, page, '서울', '광주송정', '20250127', '08');
+        await startReservation(browser, page, '용산', '광주송정', '20250127', '08');
         console.log('[index.js] 예매 페이지로 이동 완료!');
 
         // 3) 매크로
